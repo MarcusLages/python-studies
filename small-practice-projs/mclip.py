@@ -12,14 +12,16 @@ PROMPTS = {
 def main():
     args = sys.argv
 
-    try:
-        message = args[1]
-        if message in PROMPTS:
-            prompt = PROMPTS[message]
-            pyperclip.copy(prompt)
-            print(f"{message.title()} copied!\nMessage:{prompt}")
-    except IndexError:
+    if len(args) < 2:
         print("Not enough arguments.")
+
+    message = args[1]
+    if message in PROMPTS:
+        prompt = PROMPTS[message]
+        pyperclip.copy(prompt)
+        print(f"{message.title()} copied!\nMessage: {prompt}")
+    else:
+        print("No messages recorded for this input.")
 
 if __name__ == "__main__":
     main()
