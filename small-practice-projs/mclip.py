@@ -1,5 +1,5 @@
 #! python3
-# mclip.py: Multi-clipboard program.
+# mclip.py: Multi-clipboard program to practice python scripting.
 
 import sys, pyperclip
 
@@ -14,6 +14,7 @@ def main():
 
     if len(args) < 2:
         print("Not enough arguments.")
+        sys.exit()
 
     message = args[1]
     if message in PROMPTS:
