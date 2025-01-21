@@ -24,5 +24,12 @@ def main():
     else:
         print("No messages recorded for this input.")
 
+def get_data_from_csv(csv_filename):
+    with open(csv_filename) as fp:
+        csv_reader = csv.reader(fp, delimiter=":", quotechar='"')
+        data_read = [row for row in csv_reader]
+
+    return data_read
+
 if __name__ == "__main__":
     main()
