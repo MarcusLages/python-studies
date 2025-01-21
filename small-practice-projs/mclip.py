@@ -5,9 +5,9 @@ mclip.py: Multi-clipboard program to practice python scripting.
 :author: Marcus V S Lages
 """
 
-import sys, pyperclip, csv
+import os, sys, pyperclip, csv
 
-CSV_FILE = "example.csv"
+CSV_FILE = "prompts.csv"
 
 def main():
     args = sys.argv
@@ -18,7 +18,7 @@ def main():
 
     prompts = get_msg_prompts()
     message = args[1]
-    is_in_terminal = sys.stdin.isatty()
+    is_in_terminal = sys.stdout.isatty()
 
     if message in prompts:
         prompt = prompts[message]
@@ -31,7 +31,10 @@ def main():
         print("No messages recorded for this input.")
 
 def get_data_from_csv(csv_filename):
-    with open(csv_filename) as fp:
+    cur_dir = os.path.dirname(os.path.abspath(__file__))
+    csv_path = os.path.join(cur_dir, CSV_FILE)
+
+    with open(csv_path) as fp:
         csv_reader = csv.reader(fp, delimiter=":", quotechar='"')
         data_read = [row for row in csv_reader]
 
