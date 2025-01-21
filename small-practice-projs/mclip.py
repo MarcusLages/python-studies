@@ -1,7 +1,7 @@
 #! python3
 # mclip.py: Multi-clipboard program to practice python scripting.
 
-import sys, pyperclip
+import sys, pyperclip, csv
 
 # TODO: it would be cool to read this from a .txt file that is editable
 PROMPTS = {
