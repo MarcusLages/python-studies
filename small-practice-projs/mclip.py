@@ -18,12 +18,16 @@ def main():
 
     prompts = get_msg_prompts()
     message = args[1]
+    is_in_terminal = sys.stdin.isatty()
 
     if message in prompts:
         prompt = prompts[message]
         pyperclip.copy(prompt)
-        print(f"{message.title()} copied!\nMessage: {prompt}")
-    else:
+
+        if is_in_terminal:
+            print(f"{message.title()} copied!\nMessage: {prompt}")
+
+    elif is_in_terminal:
         print("No messages recorded for this input.")
 
 def get_data_from_csv(csv_filename):
