@@ -1,13 +1,13 @@
 #! python3
-# mclip.py: Multi-clipboard program to practice python scripting.
+"""
+mclip.py: Multi-clipboard program to practice python scripting.
+
+:author: Marcus V S Lages
+"""
 
 import sys, pyperclip, csv
 
-# TODO: it would be cool to read this from a .txt file that is editable
-PROMPTS = {
-    'agree' : "Yes. Looks good to me.",
-    'busy' : "Sorry, can we talk later"
-}
+CSV_FILE = "example.csv"
 
 def main():
     args = sys.argv
@@ -16,9 +16,11 @@ def main():
         print("Not enough arguments.")
         sys.exit()
 
+    prompts = get_msg_prompts()
     message = args[1]
-    if message in PROMPTS:
-        prompt = PROMPTS[message]
+
+    if message in prompts:
+        prompt = prompts[message]
         pyperclip.copy(prompt)
         print(f"{message.title()} copied!\nMessage: {prompt}")
     else:
@@ -48,6 +50,16 @@ def msg_list_to_prompts(message_list):
         prompts[key] = value
 
     return prompts
+
+def get_msg_prompts():
+    """
+    Gets all the message prompts from a .csv file as a dictionary.
+    You can access the prompts using the message label as a key.
+    :return:
+    """
+    msg_list = get_data_from_csv(CSV_FILE)
+    return msg_list_to_prompts(msg_list)
+
 
 if __name__ == "__main__":
     main()
