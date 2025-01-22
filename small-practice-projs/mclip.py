@@ -10,6 +10,10 @@ import os, sys, pyperclip, csv
 CSV_FILE = "prompts.csv"
 
 def main():
+    """
+    Main function that runs the script. Checks for input validation
+    and calls the right action.
+    """
     args = sys.argv
 
     if len(args) < 2:
@@ -31,6 +35,14 @@ def main():
         print("No messages recorded for this input.")
 
 def get_data_from_csv(csv_filename):
+    """
+    Reads data from a .csv file and returns as a list of the rows with
+    each row being an inner list.
+
+    :param csv_filename: Name of the .csv file and path relative to the
+                         python file
+    :return:             .csv data as a list of rows
+    """
     cur_dir = os.path.dirname(os.path.abspath(__file__))
     csv_path = os.path.join(cur_dir, CSV_FILE)
 
