@@ -8,6 +8,7 @@ mclip.py: Multi-clipboard program to practice python scripting.
 import os, sys, pyperclip, csv
 
 CSV_FILE = "prompts.csv"
+MIN_ARGS = 2
 
 def main():
     """
@@ -15,10 +16,7 @@ def main():
     and calls the right action.
     """
     args = sys.argv
-
-    if len(args) < 2:
-        print("Not enough arguments.")
-        sys.exit()
+    validate_arg_size(args)
 
     prompts = get_msg_prompts()
     message = args[1]
@@ -33,6 +31,19 @@ def main():
 
     elif is_in_terminal:
         print("No messages recorded for this input.")
+
+def validate_arg_size(args):
+    """
+    Validates the size of the arguments list so it has the min amount
+    of arguments to run the script.
+
+    CLOSES THE PROGRAM IF THERE'S NOT ENOUGH ARGUMENTS
+
+    :param args:    terminal arguments list
+    """
+    if len(args) < MIN_ARGS:
+        print("Not enough arguments.")
+        sys.exit()
 
 def get_data_from_csv(csv_filename):
     """
