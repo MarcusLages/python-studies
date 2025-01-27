@@ -19,6 +19,16 @@ def main():
     prompts = get_msg_prompts()
     is_in_terminal = sys.stdout.isatty()
 
+    if args.list and is_in_terminal:
+        print("Keyword\t\t| Message\n"
+              "-------------------------------")
+        for keyword, message in prompts.items():
+            print(f"{keyword}\t\t| {message}")
+        return
+
+    if args.add:
+        return
+
     if args.keyword in prompts:
         prompt = prompts[args.keyword]
         pyperclip.copy(prompt)
@@ -34,9 +44,9 @@ def parse_cmd_args():
     """
     Parses command line arguments into an object with the following
     Namespace with following attributes:\n
-        add:        True if user would like to add a message to mclip\n
         list:       True if user would like to list all possible keywords
                     and messages
+        add:        True if user would like to add a message to mclip\n
         keyword:    keyword to find or add a message on/to mclip\n
         full_message: full message for adding a message to mclip
     :return: parsed arguments as a Namespace object
@@ -48,8 +58,8 @@ def parse_cmd_args():
                     "through just typing a keyword"
     )
     #TODO: add help for each argument and add the list and add option
-    parser.add_argument("-a", "--add", action="store_true")
     parser.add_argument("-l", "--list", action="store_true")
+    parser.add_argument("-a", "--add", action="store_true")
     parser.add_argument("keyword", nargs="?")
     parser.add_argument("full_message",
                         nargs="*",
