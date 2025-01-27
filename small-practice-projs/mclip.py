@@ -16,10 +16,8 @@ def main():
     and calls the right action.
     """
     args = parse_cmd_args()
-    prompts = get_msg_prompts()
     is_in_terminal = sys.stdout.isatty()
 
-    #TODO: isolate these functions PLEASE
     if args.list and is_in_terminal:
         display_msg_list()
         return
@@ -30,16 +28,7 @@ def main():
         add_to_msg_list(new_entry)
         return
 
-    if args.keyword in prompts:
-        prompt = prompts[args.keyword]
-        pyperclip.copy(prompt)
-
-        if is_in_terminal:
-            print(f"{args.keyword.title()} copied!\n"
-                  f"Message: {prompt}")
-
-    elif is_in_terminal:
-        print("No messages recorded for this input.")
+    get_msg_to_clipboard(args.keyword)
 
 def parse_cmd_args():
     """
@@ -108,6 +97,27 @@ def add_to_msg_list(new_entry):
         keyword, message = new_entry
         print(f"{keyword.title()} written!\n"
               f"Message: {message}")
+
+def get_msg_to_clipboard(keyword):
+    """
+    Gets the message correspondent to the keyword and adds it to
+    the clipboard.
+
+    :param keyword: used to access the message
+    """
+    prompts = get_msg_prompts()
+    is_in_terminal = sys.stdout.isatty()
+
+    if keyword in prompts:
+        prompt = prompts[keyword]
+        pyperclip.copy(prompt)
+
+        if is_in_terminal:
+            print(f"{keyword.title()} copied!\n"
+                  f"Message: {prompt}")
+
+    elif is_in_terminal:
+        print("No messages recorded for this input.")
 
 def get_data_from_csv(csv_path):
     """
