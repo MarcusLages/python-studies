@@ -7,6 +7,7 @@ mclip.py: Multi-clipboard program to practice python scripting.
 
 import os, sys, pyperclip, csv, argparse
 
+MCLIP_VERSION = "0.8-alpha"
 CSV_FILE = "prompts.csv"
 
 def main():
@@ -18,7 +19,7 @@ def main():
     prompts = get_msg_prompts()
     is_in_terminal = sys.stdout.isatty()
 
-    #TODO: isolate this functions PLEASE
+    #TODO: isolate these functions PLEASE
     if args.list and is_in_terminal:
         display_msg_list()
         return
@@ -51,12 +52,14 @@ def parse_cmd_args():
         message: full message for adding a message to mclip
     :return: parsed arguments as a Namespace object
     """
-    #TODO: add version
     parser = argparse.ArgumentParser(
         description="Multi-clipboard program used to assign " \
                     "shortcuts to add phrases to the clipboard " \
                     "through just typing a keyword"
     )
+    parser.add_argument("-v", "--version",
+                        action="version",
+                        version=f"%(prog)s {MCLIP_VERSION}")
     parser.add_argument("-l", "--list",
                         action="store_true",
                         help="displays a list with all the available "
