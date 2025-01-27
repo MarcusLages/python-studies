@@ -72,7 +72,6 @@ def parse_cmd_args():
                     "shortcuts to add phrases to the clipboard " \
                     "through just typing a keyword"
     )
-    #TODO: add help for each argument and add the list and add option
     parser.add_argument("-l", "--list",
                         action="store_true",
                         help="displays a list with all the available "
