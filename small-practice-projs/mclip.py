@@ -74,13 +74,22 @@ def parse_cmd_args():
     )
     #TODO: add help for each argument and add the list and add option
     parser.add_argument("-l", "--list",
-                        action="store_true")
+                        action="store_true",
+                        help="displays a list with all the available "
+                             "keywords and messages")
     parser.add_argument("-a", "--add",
-                        action="store_true")
+                        action="store_true",
+                        help="adds a keyword-message to the available "
+                             "list. Uses [keyword] and [message]")
     parser.add_argument("keyword",
-                        nargs="?")
+                        nargs="?",
+                        help="used to retrieve a message or add a "
+                             "message with [-a]/[--a]")
     parser.add_argument("message",
-                        nargs="*")
+                        nargs="*",
+                        help="used with [-a][--a] to add a "
+                             "keyword-message to the list of available "
+                             " messages")
     return parser.parse_args()
 
 def get_data_from_csv(csv_path):
