@@ -7,6 +7,7 @@ mclip.py: Multi-clipboard program to practice python scripting.
 
 import os, sys, pyperclip, csv, argparse
 
+NO_ARGS = 1
 MCLIP_VERSION = "0.8-alpha"
 CSV_FILE = "prompts.csv"
 
@@ -60,13 +61,35 @@ def parse_cmd_args():
     parser.add_argument("keyword",
                         nargs="?",
                         help="used to retrieve a message or add a "
-                             "message with [-a]/[--a]")
+                             "message with [-a]/[--add]")
     parser.add_argument("message",
                         nargs="*",
                         help="used with [-a][--a] to add a "
                              "keyword-message to the list of available "
                              " messages")
-    return parser.parse_args()
+    args = parser.parse_args()
+    handle_missing_args(parser, args)
+    return args
+
+def handle_missing_args(parser, args):
+    """
+    Handles situations when the program is missing arguments.
+
+    :param parser:  argument parser used for error printing
+                    standardization
+    :param args:    parsed arguments
+    :precondition:  parser is an argparse.ArgumentParser object
+    :return:
+    """
+    if len(sys.argv) == NO_ARGS:
+        parser.print_help()
+        sys.exit()
+
+    if args.add:
+        if args.keyword is None:
+            parser.error("Keyword is required when using --add.")
+        if not args.message:
+            parser.error("Message is required when using --add.")
 
 def display_msg_list():
     """
