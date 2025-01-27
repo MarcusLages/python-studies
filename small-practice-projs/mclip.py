@@ -15,10 +15,10 @@ def main():
     and calls the right action.
     """
     args = parse_cmd_args()
-
     prompts = get_msg_prompts()
     is_in_terminal = sys.stdout.isatty()
 
+    #TODO: isolate this functions PLEASE
     if args.list and is_in_terminal:
         print("Keyword\t\t| Message\n"
               "-------------------------------")
@@ -27,6 +27,21 @@ def main():
         return
 
     if args.add:
+        csv_path = get_csv_path(CSV_FILE)
+        full_message = " ".join(args.full_message)
+        new_line = [args.keyword, full_message]
+
+        with open(csv_path, mode="a", newline="") as file:
+            file.write("\n")
+            file_writer = csv.writer(file, delimiter=":")
+            file_writer.writerow(new_line)
+
+        if is_in_terminal:
+            print(f"{args.keyword.title()} written!\n"
+                  f"Message: {full_message}")
+        else:
+            print("No messages recorded for this input.")
+
         return
 
     if args.keyword in prompts:
@@ -65,8 +80,7 @@ def parse_cmd_args():
     parser.add_argument("keyword",
                         nargs="?")
     parser.add_argument("full_message",
-                        nargs="*",
-                        action="append")
+                        nargs="*")
     return parser.parse_args()
 
 def get_data_from_csv(csv_path):
