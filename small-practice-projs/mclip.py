@@ -20,10 +20,7 @@ def main():
 
     #TODO: isolate this functions PLEASE
     if args.list and is_in_terminal:
-        print("Keyword\t\t| Message\n"
-              "-------------------------------")
-        for keyword, message in prompts.items():
-            print(f"{keyword}\t\t| {message}")
+        display_msg_list()
         return
 
     if args.add:
@@ -90,6 +87,18 @@ def parse_cmd_args():
                              "keyword-message to the list of available "
                              " messages")
     return parser.parse_args()
+
+def display_msg_list():
+    """
+    Lists/displays all combinations of keyword and messages from the
+    stored .csv file.
+    """
+    prompts = get_msg_prompts()
+
+    print("Keyword\t\t| Message\n"
+          "-------------------------------")
+    for keyword, message in prompts.items():
+        print(f"{keyword}\t\t| {message}")
 
 def get_data_from_csv(csv_path):
     """
