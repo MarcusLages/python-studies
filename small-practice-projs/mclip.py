@@ -24,21 +24,9 @@ def main():
         return
 
     if args.add:
-        csv_path = get_csv_path(CSV_FILE)
         message = " ".join(args.message)
-        new_line = [args.keyword, message]
-
-        with open(csv_path, mode="a", newline="") as file:
-            file.write("\n")
-            file_writer = csv.writer(file, delimiter=":")
-            file_writer.writerow(new_line)
-
-        if is_in_terminal:
-            print(f"{args.keyword.title()} written!\n"
-                  f"Message: {message}")
-        else:
-            print("No messages recorded for this input.")
-
+        new_entry = (args.keyword, message)
+        add_to_msg_list(new_entry)
         return
 
     if args.keyword in prompts:
@@ -99,6 +87,24 @@ def display_msg_list():
           "-------------------------------")
     for keyword, message in prompts.items():
         print(f"{keyword}\t\t| {message}")
+
+def add_to_msg_list(new_entry):
+    """
+    Adds a new entry of keyword-message to the list.
+
+    :param new_entry: tuple (or list) with (keyword, list)
+    """
+    csv_path = get_csv_path(CSV_FILE)
+    is_in_terminal = sys.stdout.isatty()
+
+    with open(csv_path, mode="a", newline="") as file:
+        file_writer = csv.writer(file, delimiter=":")
+        file_writer.writerow(new_entry)
+
+    if is_in_terminal:
+        keyword, message = new_entry
+        print(f"{keyword.title()} written!\n"
+              f"Message: {message}")
 
 def get_data_from_csv(csv_path):
     """
