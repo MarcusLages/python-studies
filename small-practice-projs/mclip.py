@@ -58,26 +58,28 @@ def parse_cmd_args():
                     "through just typing a keyword"
     )
     #TODO: add help for each argument and add the list and add option
-    parser.add_argument("-l", "--list", action="store_true")
-    parser.add_argument("-a", "--add", action="store_true")
-    parser.add_argument("keyword", nargs="?")
+    parser.add_argument("-l", "--list",
+                        action="store_true")
+    parser.add_argument("-a", "--add",
+                        action="store_true")
+    parser.add_argument("keyword",
+                        nargs="?")
     parser.add_argument("full_message",
                         nargs="*",
                         action="append")
     return parser.parse_args()
 
-def get_data_from_csv(csv_filename):
+def get_data_from_csv(csv_path):
     """
     Reads data from a .csv file and returns as a list of the rows with
     each row being an inner list.
 
-    :param csv_filename: Name of the .csv file and path relative to the
-                         python file
-    :return:             .csv data as a list of rows
+    :param csv_path:    Pathname of the .csv file
+    :precondition:      .csv file must be separated by colon (:)
+    :precondition:      Pathname relative to the python file or
+                        absolute path
+    :return: .csv data as a list of rows
     """
-    cur_dir = os.path.dirname(os.path.abspath(__file__))
-    csv_path = os.path.join(cur_dir, csv_filename)
-
     with open(csv_path) as fp:
         csv_reader = csv.reader(fp, delimiter=":", quotechar='"')
         data_read = [row for row in csv_reader]
@@ -102,14 +104,30 @@ def msg_list_to_prompts(message_list):
 
     return prompts
 
-def get_msg_prompts():
+def get_csv_path(csv_filename):
+    """
+    Gets the absolute path from the python program to the .csv
+    file. Necessary so the program can be ran from any folder.
+
+    :param csv_filename: filepath of the .csv file
+    :precondition:       csv_filename must be relative to the
+                         python file
+    :return: absolute path from python program to the .csv file
+    """
+    cur_dir = os.path.dirname(os.path.abspath(__file__))
+    return os.path.join(cur_dir, csv_filename)
+
+def get_msg_prompts(csv_filename=CSV_FILE):
     """
     Gets all the message prompts from a .csv file as a dictionary.
     You can access the prompts using the message label as a keyword.
 
+    :param csv_filename: .csv file where the message prompts will be
+                         extracted
     :return: map of {keyword:full message}
     """
-    msg_list = get_data_from_csv(CSV_FILE)
+    csv_path = get_csv_path(csv_filename)
+    msg_list = get_data_from_csv(csv_path)
     return msg_list_to_prompts(msg_list)
 
 
