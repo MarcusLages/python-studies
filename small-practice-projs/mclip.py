@@ -28,8 +28,8 @@ def main():
 
     if args.add:
         csv_path = get_csv_path(CSV_FILE)
-        full_message = " ".join(args.full_message)
-        new_line = [args.keyword, full_message]
+        message = " ".join(args.message)
+        new_line = [args.keyword, message]
 
         with open(csv_path, mode="a", newline="") as file:
             file.write("\n")
@@ -38,7 +38,7 @@ def main():
 
         if is_in_terminal:
             print(f"{args.keyword.title()} written!\n"
-                  f"Message: {full_message}")
+                  f"Message: {message}")
         else:
             print("No messages recorded for this input.")
 
@@ -63,7 +63,7 @@ def parse_cmd_args():
                     and messages
         add:        True if user would like to add a message to mclip\n
         keyword:    keyword to find or add a message on/to mclip\n
-        full_message: full message for adding a message to mclip
+        message: full message for adding a message to mclip
     :return: parsed arguments as a Namespace object
     """
     #TODO: add version
@@ -79,7 +79,7 @@ def parse_cmd_args():
                         action="store_true")
     parser.add_argument("keyword",
                         nargs="?")
-    parser.add_argument("full_message",
+    parser.add_argument("message",
                         nargs="*")
     return parser.parse_args()
 
