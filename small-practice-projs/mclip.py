@@ -5,45 +5,56 @@ mclip.py: Multi-clipboard program to practice python scripting.
 :author: Marcus V S Lages
 """
 
-import os, sys, pyperclip, csv
+import os, sys, pyperclip, csv, argparse
 
 CSV_FILE = "prompts.csv"
-MIN_ARGS = 2
 
 def main():
     """
     Main function that runs the script. Checks for input validation
     and calls the right action.
     """
-    args = sys.argv
-    validate_arg_size(args)
+    args = parse_cmd_args()
 
     prompts = get_msg_prompts()
-    message = args[1]
     is_in_terminal = sys.stdout.isatty()
 
-    if message in prompts:
-        prompt = prompts[message]
+    if args.keyword in prompts:
+        prompt = prompts[args.keyword]
         pyperclip.copy(prompt)
 
         if is_in_terminal:
-            print(f"{message.title()} copied!\nMessage: {prompt}")
+            print(f"{args.keyword.title()} copied!\n"
+                  f"Message: {prompt}")
 
     elif is_in_terminal:
         print("No messages recorded for this input.")
 
-def validate_arg_size(args):
+def parse_cmd_args():
     """
-    Validates the size of the arguments list so it has the min amount
-    of arguments to run the script.
-
-    CLOSES THE PROGRAM IF THERE'S NOT ENOUGH ARGUMENTS
-
-    :param args:    terminal arguments list
+    Parses command line arguments into an object with the following
+    Namespace with following attributes:\n
+        add:        True if user would like to add a message to mclip\n
+        list:       True if user would like to list all possible keywords
+                    and messages
+        keyword:    keyword to find or add a message on/to mclip\n
+        full_message: full message for adding a message to mclip
+    :return: parsed arguments as a Namespace object
     """
-    if len(args) < MIN_ARGS:
-        print("Not enough arguments.")
-        sys.exit()
+    #TODO: add version
+    parser = argparse.ArgumentParser(
+        description="Multi-clipboard program used to assign " \
+                    "shortcuts to add phrases to the clipboard " \
+                    "through just typing a keyword"
+    )
+    #TODO: add help for each argument and add the list and add option
+    parser.add_argument("-a", "--add", action="store_true")
+    parser.add_argument("-l", "--list", action="store_true")
+    parser.add_argument("keyword", nargs="?")
+    parser.add_argument("full_message",
+                        nargs="*",
+                        action="append")
+    return parser.parse_args()
 
 def get_data_from_csv(csv_filename):
     """
@@ -55,7 +66,7 @@ def get_data_from_csv(csv_filename):
     :return:             .csv data as a list of rows
     """
     cur_dir = os.path.dirname(os.path.abspath(__file__))
-    csv_path = os.path.join(cur_dir, CSV_FILE)
+    csv_path = os.path.join(cur_dir, csv_filename)
 
     with open(csv_path) as fp:
         csv_reader = csv.reader(fp, delimiter=":", quotechar='"')
@@ -84,8 +95,9 @@ def msg_list_to_prompts(message_list):
 def get_msg_prompts():
     """
     Gets all the message prompts from a .csv file as a dictionary.
-    You can access the prompts using the message label as a key.
-    :return:
+    You can access the prompts using the message label as a keyword.
+
+    :return: map of {keyword:full message}
     """
     msg_list = get_data_from_csv(CSV_FILE)
     return msg_list_to_prompts(msg_list)
